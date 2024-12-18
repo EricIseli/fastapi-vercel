@@ -1,0 +1,30 @@
+/* Tabelle */
+.MuiTableContainer-root {
+  max-height: 400px; /* Feste Höhe für die Tabelle */
+  overflow-y: auto; /* Scrollbalken aktivieren */
+}
+
+/* Karte */
+.leaflet-container {
+  height: 400px; /* Höhe der Karte */
+  width: 100%; /* Breite der Karte */
+}
+
+/* Abstand zwischen Tabelle und Karte */
+.spacing {
+  margin: 20px 0;
+}
+
+/* Überschriften */
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
