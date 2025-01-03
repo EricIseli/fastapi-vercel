@@ -1,66 +1,79 @@
 import React from "react";
-import { Line } from "react-chartjs-2";
+import { VegaLite } from "react-vega";
 import PropTypes from "prop-types";
-import "chart.js/auto";
 
-// Hilfsfunktion zur Berechnung der Woche
-const getWeekData = (data, selectedDate) => {
-  const selectedTimestamp = new Date(selectedDate).setHours(0, 0, 0, 0); // Startdatum ohne Uhrzeit
-  const startOfWeek = selectedTimestamp - 3 * 24 * 60 * 60 * 1000; // 3 Tage zurück
-  const endOfWeek = selectedTimestamp + 3 * 24 * 60 * 60 * 1000; // 3 Tage vorwärts
-
-  return data.filter((item) => {
-    const itemDate = new Date(item.Datum).setHours(0, 0, 0, 0); // ISO-String zu Datum ohne Uhrzeit
-    return itemDate >= startOfWeek && itemDate <= endOfWeek;
-  });
-};
-
-const ChartComponent = ({ data, selectedDate }) => {
-  // Berechne die Daten für die Woche des ausgewählten Datums
-  const weeklyData = getWeekData(data, selectedDate);
-
-  // Labels und Temperaturen für das Diagramm vorbereiten
-  const labels = weeklyData.map((item) =>
-    new Date(item.Datum).toLocaleDateString("de-DE", { weekday: "long" })
-  );
-  const temperatures = weeklyData.map((item) => item.T);
-
-  // Chart.js Konfiguration
-  const chartData = {
-    labels,
-    datasets: [
+const Chart = ({ data }) => {
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    description: "Temperatur und Niederschlagsmenge über sieben Tage",
+    width: 450,
+    height: 350,
+    data: {
+      values: data,
+    },
+    encoding: {
+      x: {
+        field: "Datum",
+        type: "temporal",
+        title: "Datum",
+        axis: {
+          labelAngle: -45,
+          format: "%d.%m.%Y",
+        },
+      },
+    },
+    layer: [
       {
-        label: "Temperatur (°C)",
-        data: temperatures,
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        mark: { type: "line", point: true, color: "red" },
+        encoding: {
+          y: {
+            field: "T",
+            type: "quantitative",
+            title: "Temperatur (°C)",
+            axis: {
+              titleColor: "red", // Farbe des Titels für Temperatur
+              labelColor: "red", // Farbe der Labels für Temperatur
+            },
+          },
+        },
+      },
+      {
+        mark: { type: "line", point: true, color: "blue" },
+        encoding: {
+          y: {
+            field: "RainDur",
+            type: "quantitative",
+            title: "Niederschlagsdauer (min)",
+            axis: {
+              titleColor: "blue", // Farbe des Titels für Niederschlag
+              labelColor: "blue", // Farbe der Labels für Niederschlag
+            },
+          },
+        },
       },
     ],
+    resolve: { scale: { y: "independent" } },
   };
 
   return (
-    <div style={{ height: "400px" }}>
-      {weeklyData.length > 0 ? (
-        <Line data={chartData} />
+    <div className="chart-container">
+      {data.length > 0 ? (
+        <VegaLite spec={spec} />
       ) : (
-        <p>
-          Keine Daten für die Woche vom{" "}
-          {new Date(selectedDate).toLocaleDateString()} verfügbar.
-        </p>
+        <p>Keine Daten verfügbar.</p>
       )}
     </div>
   );
 };
 
-ChartComponent.propTypes = {
+Chart.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      Datum: PropTypes.number.isRequired,
+      Datum: PropTypes.string.isRequired,
       T: PropTypes.number.isRequired,
+      RainDur: PropTypes.number.isRequired,
     })
   ).isRequired,
-  selectedDate: PropTypes.string.isRequired, // Format YYYY-MM-DD
 };
 
-export default ChartComponent;
+export default Chart;

@@ -1,108 +1,88 @@
-import { Container, Typography, Grid } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import DataTable from "./table";
 import Map from "./Map";
 import Chart from "./Chart";
-import { useState, useEffect } from "react";
+import { Slider, Typography } from "@mui/material";
 import "./styles.css";
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [stations, setStations] = useState([]); // Liste aller Stationen
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  ); // Setzt das heutige Datum
+  const [stations, setStations] = useState([]);
   const [selectedStation, setSelectedStation] = useState("");
+  const [selectedDate, setSelectedDate] = useState("2023-01-01");
+  const [average, setAverage] = useState({
+    avg_temp: null,
+    total_rain_dur: null,
+  });
+  const [filteredData, setFilteredData] = useState([]);
+  const [sliderValue, setSliderValue] = useState(0);
 
-  // Lade alle verfügbaren Stationen beim Start
   useEffect(() => {
     const fetchStations = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/py/stations");
-        if (!response.ok) {
-          throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-        }
-        const result = await response.json();
-        console.log("Verfügbare Stationen:", result.stations);
-        setStations(result.stations);
-
-        // Setzt die erste Station als Standardauswahl
-        if (result.stations.length > 0) {
-          setSelectedStation(result.stations[0]);
-        }
-      } catch (error) {
-        console.error("Fehler beim Laden der Stationen:", error);
-        setError("Stationen konnten nicht geladen werden.");
-      }
+      const response = await fetch("/api/py/stations");
+      const result = await response.json();
+      setStations(result.stations);
     };
-
     fetchStations();
   }, []);
 
-  // Lade die Wetterdaten basierend auf Datum und Station
   useEffect(() => {
-    const fetchFilteredData = async (date, station) => {
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/py/week?selected_date=${date}&station=${station}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log("API Response:", result.week_data);
-        setData(result.week_data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Fehler beim Abrufen der Daten:", error);
-        setError("Daten konnten nicht geladen werden.");
-        setLoading(false);
-      }
+    const fetchData = async () => {
+      const response = await fetch(
+        `/api/py/week?selected_date=${selectedDate}&station=${selectedStation}`
+      );
+      const result = await response.json();
+      setData(result.week_data);
+      setAverage(result.average); // Durchschnittswerte setzen
     };
+    fetchData();
+  }, [selectedStation, selectedDate]);
 
-    if (selectedDate) {
-      fetchFilteredData(selectedDate, selectedStation);
-    }
-  }, [selectedDate, selectedStation]);
+  // Debugging: Daten überprüfen
+  console.log("Daten, die an VegaLite übergeben werden:", data);
 
   return (
-    <Container>
-      <Typography variant="h3" gutterBottom>
-        Wetterdaten 2023
-      </Typography>
-
-      {error && (
-        <Typography color="error" variant="h6">
-          {error}
-        </Typography>
-      )}
+    <div className="app-container">
+      <div className="title-container">
+        <h1 className="title">Wetterdaten Zürich 2023</h1>
+      </div>
+      {!selectedStation || !selectedDate ? (
+        <p className="info-message">
+          Bitte wählen Sie eine Wetterstation und ein Datum aus, um die Daten
+          anzuzeigen.
+        </p>
+      ) : null}
 
       <DataTable
         data={data}
-        loading={loading}
-        stations={stations} // Übergabe der Stationen an die Tabelle
-        onDateChange={(date) => setSelectedDate(date)}
-        onStationChange={(station) => setSelectedStation(station)}
+        stations={stations}
+        onDateChange={setSelectedDate}
+        onStationChange={setSelectedStation}
       />
 
-      <Grid container spacing={2} style={{ marginTop: "20px" }}>
-        <Grid item xs={6}>
-          <Typography variant="h5" gutterBottom>
-            Standortkarte
-          </Typography>
-          <Map data={data} />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography variant="h5" gutterBottom>
-            Temperaturverlauf der Woche
-          </Typography>
-          <Chart data={data} selectedDate={selectedDate} />
-        </Grid>
-      </Grid>
-    </Container>
+      {/* Durchschnittswerte unter der Tabelle */}
+      <div className="average-container">
+        {average.avg_temp !== null && (
+          <p>
+            Durchschnittstemperatur der Woche: {average.avg_temp.toFixed(2)}°C
+          </p>
+        )}
+        {average.total_rain_dur !== null && (
+          <p>
+            Gesamte Niederschlagsdauer der Woche:{" "}
+            {average.total_rain_dur.toFixed(2)} min
+          </p>
+        )}
+      </div>
+      <div className="content-container">
+        <div className="map-container">
+          <Map data={data} selectedStation={selectedStation} />
+        </div>
+        <div className="chart-container">
+          <Chart data={data} />
+        </div>
+      </div>
+    </div>
   );
 };
 

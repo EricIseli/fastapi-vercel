@@ -1,30 +1,127 @@
-/* Tabelle */
-.MuiTableContainer-root {
-  max-height: 400px; /* Feste Höhe für die Tabelle */
-  overflow-y: auto; /* Scrollbalken aktivieren */
+/* App-Container */
+.app-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* Karte */
-.leaflet-container {
-  height: 400px; /* Höhe der Karte */
-  width: 100%; /* Breite der Karte */
+.title-container {
+  background-color: #e8f5e9; /* Sehr hellgrüner Hintergrund */
+  border: 2px solid #4caf50; /* Grüne Umrandung */
+  padding: 0.08rem;
+  border-radius: 5px; /* Optional: Abgerundete Ecken */
+  margin-bottom: 0.5rem; /* Abstand nach unten */
+  text-align: center; /* Text zentrieren */
 }
 
-/* Abstand zwischen Tabelle und Karte */
-.spacing {
-  margin: 20px 0;
-}
-
-/* Überschriften */
 .title {
-  font-size: 2rem;
+  font-family: CoFo Sans, Arial, sans-serif; /* Fallback-Schriftarten */
+  font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
 }
 
-.subtitle {
+.info-message {
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1.5rem;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 1rem;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Flexibles Layout für Karte und Diagramm */
+.content-container {
+  display: flex; /* Flexbox aktivieren */
+  gap: 0.5rem; /* Abstand zwischen Karte und Diagramm */
+  justify-content: space-between; /* Gleichmäßige Verteilung */
+  align-items: flex-start; /* Komponenten am oberen Rand ausrichten */
+  height: 500px; /* Höhe des gesamten Containers */
+}
+
+/* Linker Container: Karte */
+.map-container {
+  flex: 1; /* Gleicher Platz wie Diagramm */
+  background-color: white; /* Blaue Hintergrundfarbe */
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Verhindert Überlauf */
+}
+
+/* Rechter Container: Diagramm */
+.chart-container {
+  flex: 1; /* Gleicher Platz wie Karte */
+  height: 500px;
+  background-color: white; /* Blaue Hintergrundfarbe */
+  border-radius: 8px;
+  padding: 0; /* Kein Padding, um Inhalte nicht abzuschneiden */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Verhindert Überlauf */
+  height: 100%; /* Füllt die gesamte Höhe des Containers */
+}
+
+.chart-container svg {
+  width: 95%; /* Reduzierte Breite für besseren Abstand */
+  height: 100%; /* Passt sich der Containerhöhe an */
+  margin-left: 5%; /* Abstand links, um sicherzustellen, dass nichts abgeschnitten wird */
+}
+
+.chart-container p {
+  color: #777;
+  font-size: 1rem;
+}
+
+/* Durchschnittswerte Container */
+.average-container {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: left;
+}
+
+/* Durchschnittswerte Text */
+.average-container p {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #2f2c2c;
+}
+/* Allgemeine Stile für Überschriften */
+.section-title {
+  font-family: "Arial", sans-serif; /* Schriftart */
+  font-size: 1.5rem; /* Einheitliche Schriftgröße */
+  font-weight: bold; /* Fettschrift */
+  color: #333; /* Dunkles Grau */
+  margin-bottom: 0.5rem; /* Abstand nach unten */
+  text-align: left; /* Linksbündige Ausrichtung */
+  padding: 0.5rem; /* Padding für bessere Lesbarkeit */
+  border-radius: 5px; /* Abgerundete Ecken */
+}
+
+.slider-container {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+#slider-label {
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
