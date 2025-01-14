@@ -5,15 +5,20 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 
+allow_origins = [
+    "http://localhost:3000", 
+    "https://fastapi-vercel-mu-henna.vercel.app/",  
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-with open("C:/Projects_WebDiv/fastapi-vercel/api/meteodaten_2023_daily.json", encoding="utf-8") as file:
+
+with open("C:/Projects_WebDiv/fastapi-vercel/api/data/meteodaten_2023_daily.json", encoding="utf-8") as file:
     meteodaten = json.load(file)
 
 def get_week_data(data, selected_date, station):

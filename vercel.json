@@ -12,16 +12,17 @@
     ],
     "routes": [
       {
-        "src": "/api/.*",
+        "src": "/api/(.*)",
         "dest": "api/index.py"
       },
       {
         "src": "/(.*)",
-        "dest": "/"
+        "dest": "/index.html"
       }
     ],
     "env": {
-  "FASTAPI_BACKEND_URL": "https://fastapi-vercel-mu-henna.vercel.app/api",
-  "NEXT_PUBLIC_BACKEND_URL": "https://fastapi-vercel-mu-henna.vercel.app/api"
+      "FASTAPI_BACKEND_URL": "https://fastapi-vercel-mu-henna.vercel.app/api",
+      "NEXT_PUBLIC_BACKEND_URL": "https://fastapi-vercel-mu-henna.vercel.app/api"
     }
   }
+  
