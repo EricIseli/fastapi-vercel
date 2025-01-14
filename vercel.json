@@ -4,17 +4,24 @@
       {
         "src": "api/index.py",
         "use": "@vercel/python"
+      },
+      {
+        "src": "next.config.js",
+        "use": "@vercel/next"
       }
     ],
     "routes": [
       {
-        "src": "/api/(.*)",
+        "src": "/api/.*",
         "dest": "api/index.py"
       },
       {
         "src": "/(.*)",
-        "dest": "/index.html"
+        "dest": "/"
       }
-    ]
+    ],
+    "env": {
+  "FASTAPI_BACKEND_URL": "https://fastapi-vercel-mu-henna.vercel.app/api",
+  "NEXT_PUBLIC_BACKEND_URL": "https://fastapi-vercel-mu-henna.vercel.app/api"
+    }
   }
-  
