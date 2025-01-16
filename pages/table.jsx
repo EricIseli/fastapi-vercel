@@ -53,11 +53,10 @@ const DataTable = ({ data, stations, onDateChange, onStationChange }) => {
           value={selectedDate}
         />
       </div>
-      {/* Titel der Tabelle */}
       <Typography className="section-title">Wochenübersicht</Typography>
       <TableContainer
         component={Paper}
-        style={{ maxHeight: "200px", overflowY: "auto" }} // Begrenzte Höhe und Scrollbar
+        style={{ maxHeight: "200px", overflowY: "auto" }}
       >
         <Table stickyHeader>
           <TableHead>

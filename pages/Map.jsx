@@ -71,7 +71,7 @@ const Map = ({ data }) => {
             <Marker
               key={`${row.WGS84_lat}-${row.WGS84_lng}-${index}`}
               position={[row.WGS84_lat, row.WGS84_lng]}
-              icon={customIcon} // Benutzerdefiniertes Icon
+              icon={customIcon}
             >
               <Popup>
                 <b>Standort:</b> {row.Standortname}

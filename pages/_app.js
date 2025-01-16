@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import DataTable from "./table";
 import Map from "./Map";
 import Chart from "./Chart";
-import { Slider, Typography } from "@mui/material";
 import "./styles.css";
 
 const App = () => {
@@ -14,8 +13,6 @@ const App = () => {
     avg_temp: null,
     total_rain_dur: null,
   });
-  const [filteredData, setFilteredData] = useState([]);
-  const [sliderValue, setSliderValue] = useState(0);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -33,12 +30,11 @@ const App = () => {
       );
       const result = await response.json();
       setData(result.week_data);
-      setAverage(result.average); // Durchschnittswerte setzen
+      setAverage(result.average);
     };
     fetchData();
   }, [selectedStation, selectedDate]);
 
-  // Debugging: Daten überprüfen
   console.log("Daten, die an VegaLite übergeben werden:", data);
 
   return (
@@ -60,7 +56,6 @@ const App = () => {
         onStationChange={setSelectedStation}
       />
 
-      {/* Durchschnittswerte unter der Tabelle */}
       <div className="average-container">
         {average.avg_temp !== null && (
           <p>

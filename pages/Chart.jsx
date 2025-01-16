@@ -31,8 +31,8 @@ const Chart = ({ data }) => {
             type: "quantitative",
             title: "Temperatur (°C)",
             axis: {
-              titleColor: "red", // Farbe des Titels für Temperatur
-              labelColor: "red", // Farbe der Labels für Temperatur
+              titleColor: "red",
+              labelColor: "red",
             },
           },
         },
@@ -45,8 +45,8 @@ const Chart = ({ data }) => {
             type: "quantitative",
             title: "Niederschlagsdauer (min)",
             axis: {
-              titleColor: "blue", // Farbe des Titels für Niederschlag
-              labelColor: "blue", // Farbe der Labels für Niederschlag
+              titleColor: "blue",
+              labelColor: "blue",
             },
           },
         },
