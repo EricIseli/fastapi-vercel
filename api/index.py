@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 
-with open("C:/Projects_WebDiv/fastapi-vercel/api/data/meteodaten_2023_daily.json", encoding="utf-8") as file:
+with open("./api/data/meteodaten_2023_daily.json", encoding="utf-8") as file:
     meteodaten = json.load(file)
 
 def get_week_data(data, selected_date, station):
@@ -42,7 +42,6 @@ def get_week_data(data, selected_date, station):
     return week_data
 
 
-# Durchschnittswerte berechnen
 def calculate_average(data):
     if not data:
         return {"avg_temp": None, "avg_rain_dur": None}
@@ -50,7 +49,6 @@ def calculate_average(data):
     avg_rain_dur = sum(item["RainDur"] for item in data) / len(data)
     return {"avg_temp": avg_temp, "avg_rain_dur": avg_rain_dur}
 
-# Endpunkt: Wochen-Daten
 @app.get("/api/py/week")
 def get_week(selected_date: str = Query(...), station: str = Query("")):
     week_data = get_week_data(meteodaten, selected_date, station)
@@ -64,8 +62,6 @@ def get_week(selected_date: str = Query(...), station: str = Query("")):
         }
     }
 
-
-# Endpunkt: Alle Stationen
 @app.get("/api/py/stations")
 def get_all_stations():
     stations = list({item["Standortname"] for item in meteodaten})
